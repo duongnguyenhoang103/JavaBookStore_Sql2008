@@ -6,6 +6,11 @@ import nhom04.bookstore.utils.AccountUtil;
 import java.util.Vector;
 
 public class AccountService {
+    
+    public int addAccount(Account a) {
+        AccountDAO accDAO = new AccountDAO();
+        return accDAO.insert(a);
+    }
 
     public boolean authenticate(String username, String password) {
         AccountDAO accDAO = new AccountDAO();
@@ -19,6 +24,10 @@ public class AccountService {
             return false;
         }
         return true;
+    }
+    public Account getAccountByUsername(String username) {
+        AccountDAO accDAO = new AccountDAO();
+        return accDAO.get(username);
     }
     public Vector<Account> getListAccount() {
         AccountDAO accDAO = new AccountDAO();

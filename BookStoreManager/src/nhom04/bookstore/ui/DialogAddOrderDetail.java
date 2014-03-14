@@ -12,14 +12,20 @@ import nhom04.bookstore.service.BookService;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
+import nhom04.bookstore.service.AuthorService;
+import nhom04.bookstore.service.CategoryService;
+import nhom04.bookstore.service.PublisherService;
 
 /**
  *
  * @author Luka Man
  */
 public class DialogAddOrderDetail extends javax.swing.JDialog {
+    Book b;
+    int q;
 
     /**
      * Creates new form DialogAddOrderDetail
@@ -28,6 +34,21 @@ public class DialogAddOrderDetail extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setFrameStyle();
+        
+        PublisherService pubS = new PublisherService();
+        Vector<Publisher> pubV = pubS.getListPublisher();
+        pubV.add(0, new Publisher(0, "Tất cả"));
+        cbbSearchPublisher.setModel(new javax.swing.DefaultComboBoxModel(pubV));
+
+        AuthorService authS = new AuthorService();
+        Vector<Author> authV = authS.getListAuthor();
+        authV.add(0, new Author(0, "Tất cả"));
+        cbbSearchAuthor.setModel(new javax.swing.DefaultComboBoxModel(authV));
+
+        CategoryService catS = new CategoryService();
+        Vector<Category> catV = catS.getListCategory();
+        catV.add(0, new Category(0, "Tất cả"));
+        cbbSearchCategory.setModel(new javax.swing.DefaultComboBoxModel(catV));
     }
 
     @SuppressWarnings("unchecked")
@@ -317,6 +338,14 @@ public class DialogAddOrderDetail extends javax.swing.JDialog {
    }//GEN-LAST:event_tblBookMouseReleased
 
     private void tblBookMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBookMouseClicked
+        int i=tblBook.getSelectedRow();
+        if (i==-1) {
+            return;
+        }
+        Book b = (Book) tblBook.getValueAt(i, 1);
+        this.b=b;
+        tfSelectBookID.setText(""+b.getBookId());
+        tfSelectBookName.setText(b.getBookName());
    }//GEN-LAST:event_tblBookMouseClicked
 
     private void tblBookMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBookMousePressed
@@ -327,9 +356,11 @@ public class DialogAddOrderDetail extends javax.swing.JDialog {
 
     private void btnAddOrderDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddOrderDetailActionPerformed
         // TODO add your handling code here:
-
-
-
+        q=Integer.parseInt(tfSelectQuantity.getText());
+        if (q<=0) {
+            JOptionPane.showMessageDialog(this, "So luong phai lon hon 0!");
+            return;
+        }
         //Nếu Tạo mới thành công
         dispose();
     }//GEN-LAST:event_btnAddOrderDetailActionPerformed
@@ -341,28 +372,7 @@ public class DialogAddOrderDetail extends javax.swing.JDialog {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                DialogAddOrderDetail dialog = new DialogAddOrderDetail(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+    
 
     private void setFrameStyle() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();

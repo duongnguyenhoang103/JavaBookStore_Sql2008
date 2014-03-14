@@ -420,7 +420,6 @@ public class PnlBookManager extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tblBook.setCellSelectionEnabled(true);
         tblBook.getTableHeader().setReorderingAllowed(false);
         tblBook.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -440,17 +439,24 @@ public class PnlBookManager extends javax.swing.JPanel {
         });
         jScrollPane1.setViewportView(tblBook);
         tblBook.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-        tblBook.getColumnModel().getColumn(0).setResizable(false);
-        tblBook.getColumnModel().getColumn(1).setResizable(false);
-        tblBook.getColumnModel().getColumn(2).setResizable(false);
-        tblBook.getColumnModel().getColumn(3).setResizable(false);
-        tblBook.getColumnModel().getColumn(4).setResizable(false);
-        tblBook.getColumnModel().getColumn(5).setResizable(false);
-        tblBook.getColumnModel().getColumn(6).setResizable(false);
-        tblBook.getColumnModel().getColumn(7).setResizable(false);
+        if (tblBook.getColumnModel().getColumnCount() > 0) {
+            tblBook.getColumnModel().getColumn(0).setResizable(false);
+            tblBook.getColumnModel().getColumn(1).setResizable(false);
+            tblBook.getColumnModel().getColumn(2).setResizable(false);
+            tblBook.getColumnModel().getColumn(3).setResizable(false);
+            tblBook.getColumnModel().getColumn(4).setResizable(false);
+            tblBook.getColumnModel().getColumn(5).setResizable(false);
+            tblBook.getColumnModel().getColumn(6).setResizable(false);
+            tblBook.getColumnModel().getColumn(7).setResizable(false);
+        }
 
         btnDeleteBook.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nhom04/bookstore/icon/delete_32.png"))); // NOI18N
         btnDeleteBook.setContentAreaFilled(false);
+        btnDeleteBook.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDeleteBookMouseClicked(evt);
+            }
+        });
 
         btnEditBook.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nhom04/bookstore/icon/32px-Crystal_Clear_app_kwrite.png"))); // NOI18N
         btnEditBook.setContentAreaFilled(false);
@@ -569,7 +575,7 @@ public class PnlBookManager extends javax.swing.JPanel {
         BookService bookS = new BookService();
         int k = bookS.addBook(b);
         if (k == 1) {
-            JOptionPane.showMessageDialog(this, "Success!");
+            JOptionPane.showMessageDialog(this, "Them sach thanh cong!");
         } else {
             JOptionPane.showMessageDialog(this, "Fail!");
         }
@@ -642,8 +648,32 @@ public class PnlBookManager extends javax.swing.JPanel {
 
     private void btnEditBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditBookActionPerformed
         DialogEditBook book = new DialogEditBook(null, true);
+        int i=tblBook.getSelectedRow();
+        if (i==-1) {
+            return;
+        }
+        Book b = (Book) tblBook.getValueAt(i, 1);
+        book.setBook(b);
         book.setVisible(true);
+        btnSearchBookMouseClicked(null);
     }//GEN-LAST:event_btnEditBookActionPerformed
+
+    private void btnDeleteBookMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteBookMouseClicked
+        // TODO add your handling code here:
+        DialogEditBook book = new DialogEditBook(null, true);
+        int i=tblBook.getSelectedRow();
+        if (i==-1) {
+            return;
+        }
+        if (JOptionPane.showConfirmDialog(null, "Ban co chac chan muon xoa sach dang chon?", "Xác nhận", JOptionPane.OK_CANCEL_OPTION) != JOptionPane.OK_OPTION) {
+            return;
+        }
+        Book b = (Book) tblBook.getValueAt(i, 1);
+        BookService bs  = new BookService();
+        bs.deleteBook(b);
+        JOptionPane.showMessageDialog(this, "Xoa sach thanh cong!");
+        btnSearchBookMouseClicked(null);
+    }//GEN-LAST:event_btnDeleteBookMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddBook;

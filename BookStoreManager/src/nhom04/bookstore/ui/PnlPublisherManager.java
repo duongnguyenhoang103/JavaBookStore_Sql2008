@@ -4,6 +4,12 @@
  */
 package nhom04.bookstore.ui;
 
+import java.util.Vector;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import nhom04.bookstore.bean.Publisher;
+import nhom04.bookstore.service.PublisherService;
+
 /**
  *
  * @author Luka Man
@@ -15,8 +21,24 @@ public class PnlPublisherManager extends javax.swing.JPanel {
      */
     public PnlPublisherManager() {
         initComponents();
+        loadPublisher();
     }
 
+    private void loadPublisher() {
+        PublisherService ps = new PublisherService();
+        Vector<Publisher> pV = ps.getListPublisher();
+        DefaultTableModel model = new DefaultTableModel();
+        DefaultTableModel oldModel = (DefaultTableModel) tblPublisher.getModel();
+        int n = oldModel.getColumnCount();
+        for (int i = 0; i < n; i++) {
+            model.addColumn(oldModel.getColumnName(i));
+        }
+        n = pV.size();
+        for (int i = 0; i < n; i++) {
+            model.addRow(new Object[]{pV.get(i).getPublisherId(), pV.get(i), pV.get(i).getAddress(),pV.get(i).getPhone(),pV.get(i).getFax(),pV.get(i).getWebsite()});
+        }
+        tblPublisher.setModel(model);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,8 +66,8 @@ public class PnlPublisherManager extends javax.swing.JPanel {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         tfEditPublisherFax = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        tfEditPublisherWebsite = new javax.swing.JLabel();
+        tfEditPublisherWebsite = new javax.swing.JTextField();
+        xxxx = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -90,15 +112,17 @@ public class PnlPublisherManager extends javax.swing.JPanel {
 
         tblPublisher.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Mã", "Tên", "Địa chỉ", "Số ĐT", "Số Fax", "website"
             }
         ));
+        tblPublisher.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblPublisherMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblPublisher);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -126,13 +150,23 @@ public class PnlPublisherManager extends javax.swing.JPanel {
 
         jLabel5.setText("Số Fax:");
 
-        tfEditPublisherWebsite.setText("Địa chỉ Website:");
+        xxxx.setText("Địa chỉ Website:");
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nhom04/bookstore/icon/btn_save.png"))); // NOI18N
         jButton1.setText("Lưu");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
 
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nhom04/bookstore/icon/btn_delete.png"))); // NOI18N
         jButton2.setText("Xóa");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -152,13 +186,13 @@ public class PnlPublisherManager extends javax.swing.JPanel {
                 .addGap(49, 49, 49)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tfEditPublisherWebsite, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(xxxx, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(tfEditPublisherPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
                     .addComponent(tfEditPublisherFax, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField6))
+                    .addComponent(tfEditPublisherWebsite))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
@@ -194,8 +228,8 @@ public class PnlPublisherManager extends javax.swing.JPanel {
                                     .addComponent(tfEditPublisherFax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(tfEditPublisherWebsite)
-                                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(xxxx)
+                                    .addComponent(tfEditPublisherWebsite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jButton2))))
                         .addContainerGap(12, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
@@ -239,6 +273,11 @@ public class PnlPublisherManager extends javax.swing.JPanel {
 
         btnAddPublisher.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nhom04/bookstore/icon/add_16.png"))); // NOI18N
         btnAddPublisher.setText("Thêm mới");
+        btnAddPublisher.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAddPublisherMouseClicked(evt);
+            }
+        });
 
         btnClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nhom04/bookstore/icon/edit-clear.png"))); // NOI18N
         btnClear.setText("Làm lại");
@@ -335,6 +374,64 @@ public class PnlPublisherManager extends javax.swing.JPanel {
                 .addComponent(jTabbedPane1))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnAddPublisherMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddPublisherMouseClicked
+        // TODO add your handling code here:
+        Publisher p = new Publisher();
+        p.setAddress(tfAddPublisherAddress.getText());
+        p.setFax(tfAddPublisherFax.getText());
+        p.setPhone(tfAddPublisherPhone.getText());
+        p.setPublisherName(tfAddPublisherName.getText());
+        p.setWebsite(tfAddPublisherWebsite.getText());
+        PublisherService ps = new PublisherService();
+        ps.addPublisher(p);
+        JOptionPane.showMessageDialog(this, "Them NXB thanh cong!");
+        loadPublisher();
+    }//GEN-LAST:event_btnAddPublisherMouseClicked
+
+    private void tblPublisherMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblPublisherMouseClicked
+        // TODO add your handling code here:
+        int c = tblPublisher.getSelectedRow();
+        if (c == -1) {
+            return;
+        }
+        Publisher p = (Publisher) tblPublisher.getValueAt(c, 1);
+        tfEditPublisherAddress.setText(p.getAddress());
+        tfEditPublisherFax.setText(p.getFax());
+        tfEditPublisherID.setText(""+p.getPublisherId());
+        tfEditPublisherName.setText(p.getPublisherName());
+        tfEditPublisherPhone.setText(p.getPhone());
+        xxxx.setText(p.getWebsite());
+    }//GEN-LAST:event_tblPublisherMouseClicked
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+        Publisher p =new Publisher();
+        p.setPublisherId(Integer.parseInt(tfEditPublisherID.getText()));
+        p.setPublisherName(tfEditPublisherName.getText());
+        p.setFax(tfEditPublisherFax.getText());
+        p.setPhone(tfEditPublisherPhone.getText());
+        p.setAddress(tfEditPublisherAddress.getText());
+        p.setWebsite(tfEditPublisherWebsite.getText());
+        PublisherService ps = new PublisherService();
+        ps.editPublisher(p);
+        JOptionPane.showMessageDialog(this, "Sua NXB thanh cong!");
+        loadPublisher();
+    }//GEN-LAST:event_jButton1MouseClicked
+
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        // TODO add your handling code here:
+        int c = tblPublisher.getSelectedRow();
+        if (c == -1) {
+            return;
+        }
+        Publisher p = (Publisher) tblPublisher.getValueAt(c, 1);
+        PublisherService ps = new PublisherService();
+        ps.deletePublisher(p);
+        JOptionPane.showMessageDialog(this, "Xoa NXB thanh cong!");
+        loadPublisher();
+    }//GEN-LAST:event_jButton2MouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddPublisher;
     private javax.swing.JButton btnClear;
@@ -358,7 +455,6 @@ public class PnlPublisherManager extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField6;
     private javax.swing.JTable tblPublisher;
     private javax.swing.JTextField tfAddPublisherAddress;
     private javax.swing.JTextField tfAddPublisherFax;
@@ -370,7 +466,8 @@ public class PnlPublisherManager extends javax.swing.JPanel {
     private javax.swing.JTextField tfEditPublisherID;
     private javax.swing.JTextField tfEditPublisherName;
     private javax.swing.JTextField tfEditPublisherPhone;
-    private javax.swing.JLabel tfEditPublisherWebsite;
+    private javax.swing.JTextField tfEditPublisherWebsite;
     private javax.swing.JLabel tfEditPublisherWebsite1;
+    private javax.swing.JLabel xxxx;
     // End of variables declaration//GEN-END:variables
 }

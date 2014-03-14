@@ -4,10 +4,12 @@ import nhom04.bookstore.service.AccountService;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.JOptionPane;
+import nhom04.bookstore.bean.Account;
 
 public class LoginDialog extends javax.swing.JDialog {
 
     private boolean loginSuccess = false;
+    Account admin;
 
     /**
      * Creates new form LoginDialog
@@ -75,12 +77,22 @@ public class LoginDialog extends javax.swing.JDialog {
                 btnLoginMouseClicked(evt);
             }
         });
+        btnLogin1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogin1ActionPerformed(evt);
+            }
+        });
 
         btnClose1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nhom04/bookstore/icon/logout.png"))); // NOI18N
         btnClose1.setText("Thoát");
         btnClose1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 btnCloseMouseClicked(evt);
+            }
+        });
+        btnClose1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClose1ActionPerformed(evt);
             }
         });
 
@@ -181,6 +193,7 @@ public class LoginDialog extends javax.swing.JDialog {
         }
         this.loginSuccess = true;
         dispose();
+        admin=accS.getAccountByUsername(tfUserName.getText());
     }//GEN-LAST:event_btnLoginMouseClicked
 
     private void tfPasswordKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfPasswordKeyPressed
@@ -197,6 +210,15 @@ public class LoginDialog extends javax.swing.JDialog {
             btnLoginMouseClicked(null);
         }
     }//GEN-LAST:event_tfUserNameKeyPressed
+
+    private void btnLogin1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogin1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnLogin1ActionPerformed
+
+    private void btnClose1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClose1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnClose1ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose1;
     private javax.swing.JButton btnLogin1;

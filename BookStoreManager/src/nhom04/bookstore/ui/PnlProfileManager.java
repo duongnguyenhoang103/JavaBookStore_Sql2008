@@ -4,6 +4,8 @@
  */
 package nhom04.bookstore.ui;
 
+import nhom04.bookstore.bean.Account;
+
 /**
  *
  * @author Luka Man
@@ -13,6 +15,12 @@ public class PnlProfileManager extends javax.swing.JPanel {
     /**
      * Creates new form PnlProfileManager
      */
+    public void setInfo(Account a) {
+        tfAccountID.setText(""+a.getAccountId());
+        tfAddress.setText(a.getAddress());
+        tfPhone.setText(a.getPhone());
+        tfUserName.setText(a.getUsername());
+    }
     public PnlProfileManager() {
         initComponents();
     }

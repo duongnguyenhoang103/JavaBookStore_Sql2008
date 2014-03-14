@@ -5,23 +5,29 @@
 package nhom04.bookstore.ui;
 
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.Toolkit;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import nhom04.bookstore.bean.Account;
 
 /**
  *
  * @author Luka Man
  */
 public class MainFrame extends javax.swing.JFrame {
+    Account admin;
 
     public MainFrame() {
         LoginDialog Login = new LoginDialog(this, true);
         Login.setVisible(true);
         if (!Login.isSuccess()) {
-            JOptionPane.showMessageDialog(null, "Hủy đăng nhập, kết thúc chương trình! Nhưng đây là DEMO!");
+            //JOptionPane.showMessageDialog(null, "Hủy đăng nhập, kết thúc chương trình! Nhưng đây là DEMO!");
+            System.exit(0);
+            return; // Exit.....
         }
+        admin=Login.admin;
         initComponents();
         setFrameStyle();
 
@@ -39,8 +45,18 @@ public class MainFrame extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        lbRightComponent = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel(){
+            public void paintComponent( Graphics g){
+                ImageIcon icon = new ImageIcon("src/nhom04/bookstore/ui/sach.jpg");
+                Dimension d =getSize();
+                g.drawImage(icon.getImage(),0, 0, d.width, d.height, null);
+                setOpaque(false);
+                super.paintComponent(g);
+            }
+        };
+        lbRightComponent = new javax.swing.JLabel(){
+
+        };
         jLabel1 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         lbLogo = new javax.swing.JLabel();
@@ -301,9 +317,9 @@ public class MainFrame extends javax.swing.JFrame {
         menuCustomerManager.setText("Quản lý khách hàng     ");
         menuCustomerManager.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         menuCustomerManager.addMenuListener(new javax.swing.event.MenuListener() {
-            public void menuDeselected(javax.swing.event.MenuEvent evt) {
-            }
             public void menuCanceled(javax.swing.event.MenuEvent evt) {
+            }
+            public void menuDeselected(javax.swing.event.MenuEvent evt) {
             }
             public void menuSelected(javax.swing.event.MenuEvent evt) {
                 menuCustomerManagerMenuSelected(evt);
@@ -426,6 +442,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void mnItemProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnItemProfileActionPerformed
         PnlProfileManager profile = new PnlProfileManager();
         spltMain.setRightComponent(profile);
+        profile.setInfo(admin);
     }//GEN-LAST:event_mnItemProfileActionPerformed
 
     private void mnItemLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnItemLogoutActionPerformed

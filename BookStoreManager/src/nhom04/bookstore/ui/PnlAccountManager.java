@@ -7,7 +7,9 @@ package nhom04.bookstore.ui;
 import nhom04.bookstore.bean.Account;
 import nhom04.bookstore.service.AccountService;
 import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import nhom04.bookstore.utils.AccountUtil;
 
 /**
  *
@@ -387,6 +389,11 @@ public class PnlAccountManager extends javax.swing.JPanel {
 
         btnClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nhom04/bookstore/icon/edit-clear.png"))); // NOI18N
         btnClear.setText("Làm lại");
+        btnClear.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnClearMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -455,12 +462,14 @@ public class PnlAccountManager extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(tblAccount);
-        tblAccount.getColumnModel().getColumn(0).setResizable(false);
-        tblAccount.getColumnModel().getColumn(1).setResizable(false);
-        tblAccount.getColumnModel().getColumn(2).setResizable(false);
-        tblAccount.getColumnModel().getColumn(3).setResizable(false);
-        tblAccount.getColumnModel().getColumn(4).setResizable(false);
-        tblAccount.getColumnModel().getColumn(5).setResizable(false);
+        if (tblAccount.getColumnModel().getColumnCount() > 0) {
+            tblAccount.getColumnModel().getColumn(0).setResizable(false);
+            tblAccount.getColumnModel().getColumn(1).setResizable(false);
+            tblAccount.getColumnModel().getColumn(2).setResizable(false);
+            tblAccount.getColumnModel().getColumn(3).setResizable(false);
+            tblAccount.getColumnModel().getColumn(4).setResizable(false);
+            tblAccount.getColumnModel().getColumn(5).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -510,11 +519,35 @@ public class PnlAccountManager extends javax.swing.JPanel {
 
     private void btnAddAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddAccountMouseClicked
         // TODO add your handling code here:
+        Account a = new Account();
+        a.setAccountName(tfAccountName.getText());
+        a.setAddress(tfAddress.getText());
+        a.setDateOfBirth(jDateChooser1.getDateFormatString());
+        a.setGender((byte) (radNu.isSelected()?1:0));
+        a.setPassword(AccountUtil.hashPassword(tfPassword.getText()));
+        a.setPermission(0);
+        a.setPhone(tfPhone.getText());
+        a.setStatus((byte) 0);
+        a.setUsername(tfUserName.getText());
+        AccountService as = new AccountService();
+        as.addAccount(a);
+        JOptionPane.showMessageDialog(this, "Them tai khoan thanh cong!");
+        btnClearMouseClicked(null);
+        loadAccount();
     }//GEN-LAST:event_btnAddAccountMouseClicked
 
     private void tblAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblAccountMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_tblAccountMouseClicked
+
+    private void btnClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnClearMouseClicked
+        // TODO add your handling code here:
+        tfAccountName.setText("");
+        tfAddress.setText("");
+        tfPassword.setText("");
+        tfPhone.setText("");
+        tfUserName.setText("");
+    }//GEN-LAST:event_btnClearMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddAccount;

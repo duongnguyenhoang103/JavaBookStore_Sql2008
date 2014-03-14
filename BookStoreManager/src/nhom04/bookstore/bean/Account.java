@@ -16,7 +16,7 @@ public class Account {
     private int permission;
     private String accountName;
     private byte gender;
-    private Date dateOfBirth;
+    private String dateOfBirth;
     private String phone;
     private String address;
     private byte status;
@@ -84,11 +84,11 @@ public class Account {
         this.gender = gender;
     }
 
-    public Date getDateOfBirth() {
+    public String getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -128,9 +128,9 @@ public class Account {
         this.permission &= ~permission;
     }
 
-    public java.sql.Date getSqlDate() {
-        return new java.sql.Date(this.dateOfBirth.getTime());
-    }
+//    public java.sql.Date getSqlDate() {
+//        return new java.sql.Date(this.dateOfBirth.getTime());
+//    }
 
     public String toString() {
         return this.accountName;

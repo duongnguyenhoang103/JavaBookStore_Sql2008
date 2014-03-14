@@ -119,7 +119,7 @@ public class BookDAO {
         int k = -1;
         try {
             Connection conn = Database.getConnection();
-            String sql = " delete book where book_id = ?";
+            String sql = "delete FROM book where book_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setInt(1, book.getBookId());
             k = stmt.executeUpdate();
@@ -133,10 +133,10 @@ public class BookDAO {
         int k = -1;
         try {
             Connection conn = Database.getConnection();
-            String sql = " update book set [book_name] =? ,[Category_id] =?,[Publisher_id] =?,[Author_id] =?"
+            String sql = "update book set [book_name]=? ,[Category_id] =?,[Publisher_id] =?,[Author_id] =?"
                     + ",[price] =?,[discount]=?,[NumberOfPages]=?,[publishYear]=? where book_id = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
-            int i = 0;
+            int i = 1;
             stmt.setString(i++, book.getBookName());
             stmt.setInt(i++, book.getCategory().getCategoryId());
             stmt.setInt(i++, book.getPublisher().getPublisherId());

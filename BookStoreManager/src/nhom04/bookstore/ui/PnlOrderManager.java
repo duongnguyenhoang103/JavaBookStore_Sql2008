@@ -4,15 +4,26 @@
  */
 package nhom04.bookstore.ui;
 
+import javax.swing.table.DefaultTableModel;
+import nhom04.bookstore.bean.Book;
+
 /**
  *
  * @author Luka Man
  */
 public class PnlOrderManager extends javax.swing.JPanel {
+    public DefaultTableModel model;
+    public int total=0;
 
     public PnlOrderManager() {
         initComponents();
 
+        model = new DefaultTableModel();
+        DefaultTableModel oldModel = (DefaultTableModel) tblOrderDetail.getModel();
+        int n = oldModel.getColumnCount();
+        for (int i = 0; i < n; i++) {
+            model.addColumn(oldModel.getColumnName(i));
+        }
         /*
          * TableColumn testColumn =
          * tblOrderDetail.getColumnModel().getColumn(0); javax.swing.JComboBox
@@ -118,17 +129,14 @@ public class PnlOrderManager extends javax.swing.JPanel {
 
         tblOrderDetail.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Sách", "Số lượng", "Đơn giá", "Chiết khấu", "Thành tiền"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, true, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -136,10 +144,12 @@ public class PnlOrderManager extends javax.swing.JPanel {
             }
         });
         jScrollPane1.setViewportView(tblOrderDetail);
-        tblOrderDetail.getColumnModel().getColumn(0).setResizable(false);
-        tblOrderDetail.getColumnModel().getColumn(1).setResizable(false);
-        tblOrderDetail.getColumnModel().getColumn(2).setResizable(false);
-        tblOrderDetail.getColumnModel().getColumn(3).setResizable(false);
+        if (tblOrderDetail.getColumnModel().getColumnCount() > 0) {
+            tblOrderDetail.getColumnModel().getColumn(0).setResizable(false);
+            tblOrderDetail.getColumnModel().getColumn(1).setResizable(false);
+            tblOrderDetail.getColumnModel().getColumn(2).setResizable(false);
+            tblOrderDetail.getColumnModel().getColumn(3).setResizable(false);
+        }
 
         btnCreateOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nhom04/bookstore/icon/Add.png"))); // NOI18N
         btnCreateOrder.setContentAreaFilled(false);
@@ -151,6 +161,11 @@ public class PnlOrderManager extends javax.swing.JPanel {
 
         btnDeleteOrder.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nhom04/bookstore/icon/Delete.png"))); // NOI18N
         btnDeleteOrder.setContentAreaFilled(false);
+        btnDeleteOrder.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDeleteOrderMouseClicked(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
         jLabel4.setText("Tổng tiền: ");
@@ -418,9 +433,11 @@ public class PnlOrderManager extends javax.swing.JPanel {
             }
         });
         jScrollPane2.setViewportView(tblSearchOrder);
-        tblSearchOrder.getColumnModel().getColumn(0).setResizable(false);
-        tblSearchOrder.getColumnModel().getColumn(1).setResizable(false);
-        tblSearchOrder.getColumnModel().getColumn(2).setResizable(false);
+        if (tblSearchOrder.getColumnModel().getColumnCount() > 0) {
+            tblSearchOrder.getColumnModel().getColumn(0).setResizable(false);
+            tblSearchOrder.getColumnModel().getColumn(1).setResizable(false);
+            tblSearchOrder.getColumnModel().getColumn(2).setResizable(false);
+        }
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -510,12 +527,34 @@ public class PnlOrderManager extends javax.swing.JPanel {
     private void btnAddCustomerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddCustomerActionPerformed
         DialogSelectCustomer customer = new DialogSelectCustomer(null, true);
         customer.setVisible(true);
+        jTextField4.setText(customer.id);
+        jTextField2.setText(customer.name);
     }//GEN-LAST:event_btnAddCustomerActionPerformed
 
     private void btnCreateOrderActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateOrderActionPerformed
         DialogAddOrderDetail order = new DialogAddOrderDetail(null, true);
         order.setVisible(true);
+        if (order.q>0) {
+            int t = order.q*order.b.getPrice()*(100-order.b.getDiscount())/100;
+            model.addRow(new Object[]{order.b, order.q,order.b.getPrice(), ""+order.b.getDiscount()+"%", ""+t });
+            tblOrderDetail.setModel(model);
+            total+=t;
+            jTextField3.setText(""+total);
+        }
     }//GEN-LAST:event_btnCreateOrderActionPerformed
+
+    private void btnDeleteOrderMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDeleteOrderMouseClicked
+        // TODO add your handling code here:
+        int i=tblOrderDetail.getSelectedRow();
+        if (i==-1) {
+            return;
+        }
+        String s = (String) tblOrderDetail.getValueAt(i, 4);
+        model.removeRow(i);
+        tblOrderDetail.setModel(model);
+        total-=Integer.parseInt(s);
+        jTextField3.setText(""+total);
+    }//GEN-LAST:event_btnDeleteOrderMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAddCustomer;

@@ -12,7 +12,7 @@ import java.security.MessageDigest;
  */
 public class AccountUtil {
 
-    public String hashPassword(String password) {
+    public static String hashPassword(String password) {
         String hash = null;
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");

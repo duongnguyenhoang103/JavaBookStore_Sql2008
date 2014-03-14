@@ -26,6 +26,15 @@ public class BookService {
         BookDAO bDAO = new BookDAO();
         return bDAO.get(id);
     }
+    
+    public boolean editBook(Book b) {
+        BookDAO bDAO = new BookDAO();
+        return bDAO.update(b)>0;
+    }
+    public boolean deleteBook(Book b) {
+        BookDAO bDAO = new BookDAO();
+        return bDAO.delete(b)>0;
+    }
 
     public Vector<Book> findBook(String name, Category cat, Publisher pub, Author auth) {
         Book b = new Book();

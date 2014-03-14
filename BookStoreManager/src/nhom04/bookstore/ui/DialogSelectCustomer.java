@@ -17,6 +17,7 @@ import javax.swing.table.DefaultTableModel;
  * @author Luka Man
  */
 public class DialogSelectCustomer extends javax.swing.JDialog {
+    String id,name;
 
     /**
      * Creates new form DialogSelectCustomer
@@ -26,7 +27,7 @@ public class DialogSelectCustomer extends javax.swing.JDialog {
         initComponents();
         setFrameStyle();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -68,7 +69,7 @@ public class DialogSelectCustomer extends javax.swing.JDialog {
         jLabel10.setText("Số điện thoại:");
 
         btnSelectCustomer1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nhom04/bookstore/icon/Select.png"))); // NOI18N
-        btnSelectCustomer1.setText("Chọn");
+        btnSelectCustomer1.setText("Lưu");
         btnSelectCustomer1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnSelectCustomer1ActionPerformed(evt);
@@ -77,6 +78,11 @@ public class DialogSelectCustomer extends javax.swing.JDialog {
 
         btnClear.setIcon(new javax.swing.ImageIcon(getClass().getResource("/nhom04/bookstore/icon/edit-clear.png"))); // NOI18N
         btnClear.setText("Làm lại");
+        btnClear.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnClearMouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -278,8 +284,14 @@ public class DialogSelectCustomer extends javax.swing.JDialog {
 
     private void btnSelectCustomer1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectCustomer1ActionPerformed
 
-
-        dispose();
+        Customer c = new Customer();
+        c.setAddress(tfAddCustomerAddress.getText());
+        c.setCustomerName(tfAddCustomerName.getText());
+        c.setPhone(tfAddCustomerPhone.getText());
+        CustomerService cs = new CustomerService();
+        cs.addCustomer(c);
+        btnClearMouseClicked(null);
+        btnSearchCustomerMouseClicked(null);
     }//GEN-LAST:event_btnSelectCustomer1ActionPerformed
 
     private void btnSearchCustomerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSearchCustomerMouseClicked
@@ -316,36 +328,22 @@ public class DialogSelectCustomer extends javax.swing.JDialog {
 
     private void btnSelectCustomer2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectCustomer2ActionPerformed
 
-
+        
+        id=tfSelectCustomerID.getText();
+        name=tfSelectCustomerName.getText();
         dispose();
     }//GEN-LAST:event_btnSelectCustomer2ActionPerformed
+
+    private void btnClearMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnClearMouseClicked
+        // TODO add your handling code here:
+        tfAddCustomerAddress.setText("");
+        tfAddCustomerName.setText("");
+        tfAddCustomerPhone.setText("");
+    }//GEN-LAST:event_btnClearMouseClicked
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                DialogSelectCustomer dialog = new DialogSelectCustomer(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
-    
     private void setFrameStyle() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = screenSize.width;

@@ -6,13 +6,25 @@ package nhom04.bookstore.ui;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.Vector;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+import nhom04.bookstore.bean.Author;
+import nhom04.bookstore.bean.Book;
+import nhom04.bookstore.bean.Category;
+import nhom04.bookstore.bean.Publisher;
+import nhom04.bookstore.service.AuthorService;
+import nhom04.bookstore.service.BookService;
+import nhom04.bookstore.service.CategoryService;
+import nhom04.bookstore.service.PublisherService;
 
 /**
  *
  * @author Luka Man
  */
 public class DialogEditBook extends javax.swing.JDialog {
+
+    private Book b;
 
     /**
      * Creates new form DialogEditBook
@@ -21,6 +33,31 @@ public class DialogEditBook extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         setFrameStyle();
+    }
+
+    private void resetForm() {
+        cbbEditCategory.setSelectedItem(b.getCategory());
+        cbbEditAuthor.setSelectedItem(b.getAuthor());
+        cbbEditPublisher.setSelectedItem(b.getPublisher());
+
+        tfEditBookID.setText("" + b.getBookId());
+        tfEditName.setText(b.getBookName());
+        tfEditDiscount.setText("" + b.getDiscount());
+        tfEditNumberOfPages.setText("" + b.getNumberOfPages());
+        tfEditPrice.setText("" + b.getPrice());
+        tfEditPublishYear.setText("" + b.getPublishYear());
+    }
+
+    public void setBook(Book b) {
+        PublisherService pubS = new PublisherService();
+        cbbEditPublisher.setModel(new javax.swing.DefaultComboBoxModel(pubS.getListPublisher()));
+        AuthorService authS = new AuthorService();
+        cbbEditAuthor.setModel(new javax.swing.DefaultComboBoxModel(authS.getListAuthor()));
+        CategoryService catS = new CategoryService();
+        cbbEditCategory.setModel(new javax.swing.DefaultComboBoxModel(catS.getListCategory()));
+
+        this.b = b;
+        resetForm();
     }
 
     @SuppressWarnings("unchecked")
@@ -314,44 +351,28 @@ public class DialogEditBook extends javax.swing.JDialog {
 
     private void btnSaveBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveBookActionPerformed
         // TODO add your handling code here:
+        BookService bs = new BookService();
+        Book b = new Book();
+        b.setBookId(Integer.parseInt(tfEditBookID.getText()));
+        b.setAuthor((Author) cbbEditAuthor.getSelectedItem());
+        b.setBookName(tfEditName.getText());
+        b.setCategory((Category) cbbEditCategory.getSelectedItem());
+        b.setDiscount((byte) Integer.parseInt(tfEditDiscount.getText()));
+        b.setNumberOfPages(Integer.parseInt(tfEditNumberOfPages.getText()));
+        b.setPrice(Integer.parseInt(tfEditPrice.getText()));
+        b.setPublishYear(Integer.parseInt(tfEditPublishYear.getText()));
+        b.setPublisher((Publisher) cbbEditPublisher.getSelectedItem());
+        bs.editBook(b);
 
-
+        JOptionPane.showMessageDialog(this, "Sua sach thanh cong!");
         dispose();
     }//GEN-LAST:event_btnSaveBookActionPerformed
 
     private void btnClearBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearBookActionPerformed
         // TODO add your handling code here:
-
-
-        dispose();
+        resetForm();
     }//GEN-LAST:event_btnClearBookActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        try {
-            UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        java.awt.EventQueue.invokeLater(new Runnable() {
-
-            @Override
-            public void run() {
-                DialogEditBook dialog = new DialogEditBook(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
-    
     private void setFrameStyle() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int width = screenSize.width;

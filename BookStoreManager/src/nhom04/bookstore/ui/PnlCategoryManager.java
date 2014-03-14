@@ -259,7 +259,7 @@ public class PnlCategoryManager extends javax.swing.JPanel {
         CategoryService catS = new CategoryService();
         int k = catS.addCategory(cat);
         if (k == 1) {
-            JOptionPane.showMessageDialog(this, "Success");
+            JOptionPane.showMessageDialog(this, "Them loai sach thanh cong!");
             loadCategory();
         } else {
             JOptionPane.showMessageDialog(this, "fail");

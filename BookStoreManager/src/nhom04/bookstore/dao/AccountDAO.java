@@ -1,7 +1,6 @@
 package nhom04.bookstore.dao;
 
 import nhom04.bookstore.bean.Account;
-import nhom04.bookstore.bean.Author;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,7 +23,7 @@ public class AccountDAO {
                 acc.setPassword(rs.getString("PassWord"));
                 acc.setAccountName(rs.getString("Account_Name"));
                 acc.setGender(rs.getByte("gender"));
-                acc.setDateOfBirth(rs.getDate("DateOfBirth"));
+                acc.setDateOfBirth(rs.getString("DateOfBirth"));
                 acc.setPhone(rs.getString("Phone"));
                 acc.setAddress(rs.getString("Adress"));
                 acc.setStatus(rs.getByte("status"));
@@ -50,7 +49,7 @@ public class AccountDAO {
                 acc.setPassword(rs.getString("PassWord"));
                 acc.setAccountName(rs.getString("Account_Name"));
                 acc.setGender(rs.getByte("gender"));
-                acc.setDateOfBirth(rs.getDate("DateOfBirth"));
+                acc.setDateOfBirth(rs.getString("DateOfBirth"));
                 acc.setPhone(rs.getString("Phone"));
                 acc.setAddress(rs.getString("Adress"));
                 acc.setStatus(rs.getByte("status"));
@@ -74,7 +73,7 @@ public class AccountDAO {
                 acc.setPassword(rs.getString("PassWord"));
                 acc.setAccountName(rs.getString("Account_Name"));
                 acc.setGender(rs.getByte("gender"));
-                acc.setDateOfBirth(rs.getDate("DateOfBirth"));
+                acc.setDateOfBirth(rs.getString("DateOfBirth"));
                 acc.setPhone(rs.getString("Phone"));
                 acc.setAddress(rs.getString("Adress"));
                 acc.setStatus(rs.getByte("status"));
@@ -91,17 +90,18 @@ public class AccountDAO {
         try {
             Connection conn = Database.getConnection();
             String sql = "INSERT INTO Account([username],[PassWord],[Account_Name],[gender],[DateOfBirth],"
-                    + "[Phone],[Adress],[status]) "
-                    + "VALUES(?)";
+                    + "[Phone],[Adress],[status],[Permission]) "
+                    + "VALUES(?,?,?,?,?,?,?,?,?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, acc.getUsername());
             stmt.setString(2, acc.getPassword());
             stmt.setString(3, acc.getAccountName());
             stmt.setByte(4, acc.getGender());
-            stmt.setDate(5, acc.getSqlDate());
+            stmt.setString(5, acc.getDateOfBirth());
             stmt.setString(6, acc.getPhone());
             stmt.setString(7, acc.getAddress());
             stmt.setByte(8, acc.getStatus());
+            stmt.setInt(9, acc.getPermission());
             k = stmt.executeUpdate();
         } catch (Exception e) {
             e.printStackTrace();
@@ -128,7 +128,7 @@ public class AccountDAO {
             stmt.setString(2, acc.getPassword());
             stmt.setString(3, acc.getAccountName());
             stmt.setByte(4, acc.getGender());
-            stmt.setDate(5, acc.getSqlDate());
+            stmt.setString(5, acc.getDateOfBirth());
             stmt.setString(6, acc.getPhone());
             stmt.setString(7, acc.getAddress());
             stmt.setByte(8, acc.getStatus());
